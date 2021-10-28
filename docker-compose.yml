@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+  api:
+    container_name: sns_api
+    build:
+      context: .
+      dockerfile: './rust-sns-api/Dockerfile'
+    working_dir: '/api'
+    command: /bin/sh -c "cargo watch -w Cargo.toml -w src --poll -x 'run --release --color=always'"
+    volumes:
+      - './rust-sns-api:/api'
+      - 'api-cargo:/usr/local/cargo/registry'
+      - 'api-target:/api/target'
+    ports:
+      - 8087:80
+    environment:
+      TZ: Asia/Tokyo
+    depends_on:
+      - db
+
+  db:
+    container_name: sns_db
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - './docker/db/data:/var/lib/mysql:delegated'
+      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
+    ports:
+      - 3316:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 2C%Em%7^2L
+      MYSQL_DATABASE: database
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: 2C%Em%7^2L
+      TZ: 'Asia/Tokyo'
+  
+  web:
+    container_name: sns_web
+    image: node:buster-slim
+    working_dir: '/src'
+    command: /bin/sh -c "yarn install && yarn dev"
+    volumes:
+      - './rust-sns-web:/src'
+      - 'node-modules:/src/node_modules'
+    ports:
+      - 8080:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=0.0.0.0
+
+volumes:
+  api-cargo:
+  api-target:
+  node-modules:
