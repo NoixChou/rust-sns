@@ -37,7 +37,7 @@ services:
   
   web:
     container_name: sns_web
-    image: node:buster-slim
+    image: node:lts-buster-slim
     working_dir: '/src'
     command: /bin/sh -c "yarn install && yarn dev"
     volumes:
@@ -48,6 +48,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - HOST=0.0.0.0
+      - API_BASE=http://sns_api
 
 volumes:
   api-cargo:
