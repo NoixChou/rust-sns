@@ -4,7 +4,7 @@ services:
   api:
     container_name: sns_api
     build:
-      context: .
+      context: './rust-sns-api'
       dockerfile: './rust-sns-api/Dockerfile'
     working_dir: '/api'
     command: /bin/sh -c "cargo watch -w Cargo.toml -w src --poll -x 'run --release --color=always'"
