@@ -16,6 +16,7 @@ services:
       - '8087:80'
     environment:
       TZ: Asia/Tokyo
+      DATABASE_URL: "mysql://docker:2C%Em%7^2L@sns_db/database"
       RUST_LOG: trace
     depends_on:
       - db
@@ -50,6 +51,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - HOST=0.0.0.0
       - API_BASE=http://sns_api
+    depends_on:
+      - api
 
 volumes:
   api-cargo:
