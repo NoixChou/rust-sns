@@ -1,11 +1,11 @@
-version: '3.1'
+version: '3.8'
 
 services:
   api:
     container_name: sns_api
     build:
       context: './rust-sns-api'
-      dockerfile: './rust-sns-api/Dockerfile'
+      dockerfile: 'Dockerfile'
     working_dir: '/api'
     command: /bin/sh -c "cargo watch -w Cargo.toml -w src --poll -x 'run --release --color=always'"
     volumes:
@@ -19,7 +19,8 @@ services:
       DATABASE_URL: "mysql://docker:2C%Em%7^2L@sns_db/database"
       RUST_LOG: trace
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     container_name: sns_db
@@ -36,7 +37,13 @@ services:
       MYSQL_USER: docker
       MYSQL_PASSWORD: 2C%Em%7^2L
       TZ: 'Asia/Tokyo'
-  
+    healthcheck:
+      test: "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD"
+      interval: 5s
+      timeout: 1s
+      retries: 5
+      start_period: 5s
+
   web:
     container_name: sns_web
     image: node:lts-buster-slim
