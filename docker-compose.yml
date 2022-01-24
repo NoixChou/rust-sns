@@ -7,7 +7,7 @@ services:
       context: './rust-sns-api'
       dockerfile: 'Dockerfile'
     working_dir: '/api'
-    command: /bin/sh -c "cargo watch -w Cargo.toml -w src --poll -x 'run --release --color=always'"
+    command: /bin/sh -c "diesel migration run && cargo watch -w Cargo.toml -w src --poll -x 'run --release --color=always'"
     volumes:
       - './rust-sns-api:/api'
       - 'api-cargo:/usr/local/cargo/registry'
