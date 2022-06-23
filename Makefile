@@ -11,11 +11,14 @@ init:
 up:
 	docker-compose up -d
 
-up-php:
-	docker-compose -f ./docker-compose.yml -f ./docker-compose.php-backend.yml up -d --no-deps db php composer-api api-laravel web
+up-lara:
+	docker-compose -f ./docker-compose.yml -f ./docker-compose.laravel-backend.yml up -d --no-deps db php composer-api api-laravel web
+
+up-sym:
+	docker-compose -f ./docker-compose.yml -f ./docker-compose.symfony-backend.yml up -d --no-deps db php composer-api api-symfony web
 
 down:
-	docker-compose -f ./docker-compose.yml -f ./docker-compose.php-backend.yml -p rust-sns down --remove-orphans
+	docker-compose -f ./docker-compose.yml -f ./docker-compose.laravel-backend.yml -p rust-sns down --remove-orphans
 
 update:
 	$(CMD_UPDATE)

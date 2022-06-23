@@ -9,4 +9,7 @@ git pull --rebase
 cd ../rust-sns-laravel-api
 git pull --rebase
 
+cd ../rust-sns-symfony-api
+git pull --rebase
+
 cd ../

@@ -12,3 +12,8 @@ git clone git@github.com:NoixChou/rust-sns-laravel-api.git
 cd rust-sns-laravel-api || exit
 cp .env.example .env
 cd ../ || exit
+
+git clone git@github.com:NoixChou/rust-sns-symfony-api.git
+cd rust-sns-symfony-api || exit
+cp .env.example .env
+cd ../ || exit
