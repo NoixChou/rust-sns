@@ -16,7 +16,7 @@ services:
       - '8087:80'
     environment:
       TZ: Asia/Tokyo
-      DATABASE_URL: "mysql://docker:2C%Em%7^2L@sns_db/database"
+      DATABASE_URL: "postgresql://docker:2C%25Em%257%5e2L@sns_db/database"
       RUST_LOG: debug
     depends_on:
       db:
@@ -24,21 +24,19 @@ services:
 
   db:
     container_name: sns_db
-    image: mysql:5.7
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    image: postgres:14.4-alpine
     volumes:
-      - './docker/db/data:/var/lib/mysql:delegated'
-      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './docker/db/data:/var/lib/postgresql:delegated'
     ports:
-      - '3316:3306'
+      - '54321:5432'
     environment:
-      MYSQL_ROOT_PASSWORD: 2C%Em%7^2L
-      MYSQL_DATABASE: database
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: 2C%Em%7^2L
+      POSTGRES_DB: database
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: 2C%Em%7^2L
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8 --locale=C
       TZ: 'Asia/Tokyo'
     healthcheck:
-      test: "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD"
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 5s
       timeout: 1s
       retries: 5
